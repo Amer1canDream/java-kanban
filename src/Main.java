@@ -1,5 +1,4 @@
 import controllers.Manager;
-import model.Epic;
 
 public class Main {
 
