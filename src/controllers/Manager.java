@@ -31,7 +31,6 @@ public class Manager {
 
     public void deleteAllTasks() {
         tasks.clear();
-        subtasks.clear();
         epics.clear();
     }
 
@@ -42,27 +41,35 @@ public class Manager {
     }
 
     public void createTask(String name, String description) {
-        Task task = new Task(name, description, getId());
+        Task task = new Task(name, description, getId(), "NEW");
         tasks.put(task.getId(), task);
     }
 
-    public void createSubtask(String name, String description) {
-        Subtask subtask = new Subtask(name, description, getId());
+    /** Создаем подзадачу. Если у подзадачи статус NEW, то проверяем эпик на наличие других задач **/
+    public void createSubtask(String name, String description, int epicId, String status) {
+        Subtask subtask = new Subtask(name, description, getId(), status, epicId);
         subtasks.put(subtask.getId(), subtask);
+        if (subtask.getStatus() == "NEW" && epics.get(subtask.getEpicId()) != null ) {
+            boolean isNew = true;
+                /** Узнаем epicId и для каждой подзадачи этого эпика мы проверяем статус  **/
+                System.out.println(subtasksList(subtask.getEpicId()));
+                for ( Subtask subtsk : subtasksList(subtask.getEpicId())) {
+                    System.out.println(subtsk);
+                    if (subtsk.getStatus() != "NEW") {
+                        isNew = false;
+                    }
+                }
+
+            if ( isNew == true ) {
+                epics.get(subtask.getEpicId()).setStatus("NEW");
+            }
+        }
     }
 
-    public void createEpic(String name, String description) {
-        Epic epic = new Epic(name, description, getId());
+
+    public void createEpic(String name, String description, ArrayList<Integer> subtasksLinkedId) {
+        Epic epic = new Epic(name, description, getId(), "NEW", subtasksLinkedId);
         epics.put(epic.getId(), epic);
-    }
-
-    public void linkSubtask(int epicId, int subtaskId) {
-        epics.get(epicId).setSubtasks(subtaskId);
-        subtasks.get(subtaskId).setEpicId(epicId);
-    }
-
-    public void setEpicStatus(int epicId, String status) {
-        epics.get(epicId).setStatus(status);
     }
 
     public ArrayList<Subtask> subtasksList(int epicId) {
@@ -77,6 +84,10 @@ public class Manager {
         return subtasksLines;
     }
 
+
+    /**
+    Этот метод как раз и занимается тем, что на основе смены статуса подзадачи расчитывает статус эпика.
+     **/
     public void setSubtaskStatus(int subtaskId, String status) {
         subtasks.get(subtaskId).setStatus(status);
 
@@ -84,6 +95,7 @@ public class Manager {
         if ( status == "DONE") {
             isFinal = true;
 
+            /** Узнаем epicId и для каждой подзадачи этого эпика мы проверяем статус  **/
             for ( Subtask subtask : subtasksList(epics.get(subtasks.get(subtaskId).getEpicId()).getId())) {
                 if (subtask.getStatus() != "DONE") {
                     isFinal = false;
@@ -91,9 +103,20 @@ public class Manager {
             }
         }
 
+        /** Если у всех подзадач статус DONE, то устанавливаем статус DONE для эпика **/
         if ( isFinal == true ) {
             epics.get(subtasks.get(subtaskId).getEpicId()).setStatus("DONE");
         }
+    }
+
+    /** Перед удалением подзадачи мы проверяем размер subtaskList для эпика подзадачи и если он = 1, то меняем статус эпикм на NEW **/
+    public void deleteSubtask(int subtaskId) {
+        if ( subtasksList(epics.get(subtasks.get(subtaskId).getEpicId()).getId()).size() == 1 ) {
+            epics.get(subtasks.get(subtaskId).getEpicId()).setStatus("NEW");
+        }
+        epics.get(subtasks.get(subtaskId).getEpicId()).deleteSubtask(subtaskId);
+        System.out.println(subtasksList(epics.get(subtasks.get(subtaskId).getEpicId()).getId()).size());
+        subtasks.remove(subtaskId);
     }
 
     public void setTaskStatus(int taskId, String status) {
