@@ -3,10 +3,12 @@ package model;
 import java.util.ArrayList;
 
 public class Epic extends Task {
-    private ArrayList<Integer> subtasks = new ArrayList<Integer>();
-    public Epic(String name, String description, int id, String status, ArrayList<Integer> subtasks) {
-        super(name, description, id, status);
+    protected ArrayList<Integer> subtasks = new ArrayList<Integer>();
+
+    public Epic(String name, String description, ArrayList<Integer> subtasks) {
+        super(name, description);
         this.subtasks = subtasks;
+        status = "IN_PROGRESS";
     }
 
     public void setSubtasks(int subtaskId) {
