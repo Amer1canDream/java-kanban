@@ -8,7 +8,7 @@ public class Epic extends Task {
     public Epic(String name, String description, ArrayList<Integer> subtasks) {
         super(name, description);
         this.subtasks = subtasks;
-        status = "IN_PROGRESS";
+        status = Statuses.IN_PROGRESS;
     }
 
     public void setSubtasks(int subtaskId) {
