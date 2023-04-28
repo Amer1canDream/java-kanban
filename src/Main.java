@@ -1,4 +1,5 @@
-import controllers.InMemoryTaskManager;
+import controllers.Managers;
+import controllers.TaskManager;
 import model.*;
 
 import java.util.ArrayList;
@@ -9,35 +10,59 @@ public class Main {
 
         TaskManager manager = Managers.getDefault();
 
-        ArrayList<Integer> subtasksEpic1 = new ArrayList<>();
-        subtasksEpic1.add(1);
-        subtasksEpic1.add(2);
+        manager.createEpic(new Epic("Переезд", "Нужно переехать в новую квартиру", new ArrayList<>()));
+        manager.createSubtask(new Subtask("Перевезти вещи", "Нужно перевезти вещи в новую квартиру", 1, Status.NEW));
+        manager.createSubtask(new Subtask("Перевезти кота", "Нужно перевезти кота", 1, Status.NEW));
 
-        ArrayList<Integer> subtasksEpic4 = new ArrayList<>();
-        subtasksEpic4.add(4);
-        subtasksEpic4.add(5);
-
-        manager.createEpic(new Epic("Переезд", "Нужно переехать в новую квартиру", subtasksEpic1));
-        manager.createSubtask(new Subtask("Перевезти вещи", "Нужно перевезти вещи в новую квартиру", 1, Statuses.NEW));
-        manager.createSubtask(new Subtask("Перевезти кота", "Нужно перевезти кота", 1, Statuses.NEW));
-
+        System.out.println("----- Эпики");
         System.out.println(manager.getEpics());
+        System.out.println("----- Сабтаски");
         System.out.println(manager.getSubtasks());
 
-        manager.createEpic(new Epic("Обставить квартиру", "Нужно обставить квартиру", subtasksEpic4));
-        manager.createSubtask(new Subtask("Купить шкаф", "купить шкаф", 4, Statuses.NEW));
-        manager.createSubtask(new Subtask("купить люстру", "купить люстру", 4, Statuses.NEW));
+        System.out.println(manager.getSubtasks());
+        manager.createEpic(new Epic("Обставить квартиру", "Нужно обставить квартиру", new ArrayList<>()));
+        manager.createSubtask(new Subtask("Купить шкаф", "купить шкаф", 4, Status.NEW));
+        manager.createSubtask(new Subtask("купить люстру", "купить люстру", 4, Status.NEW));
 
+        System.out.println("----- Эпики, добавили 4 эпик");
         System.out.println(manager.getEpics());
+        System.out.println("----- Сабтаски, прилинковали к 4 эпику");
         System.out.println(manager.getSubtasks());
         System.out.println("---------------");
 
-        manager.setSubtaskStatus(5, Statuses.DONE);
-        manager.setSubtaskStatus(6, Statuses.DONE);
+        manager.updateSubtask(5, new Subtask("купить люстру", "купить люстру", 4, Status.DONE));
+        manager.updateSubtask(6, new Subtask("купить люстру", "купить люстру", 4, Status.DONE));
 
+        System.out.println("----- Эпики, у 4 все сабтаски в статусе DONE, эпик тоже должен быть в этом статусе");
+        System.out.println(manager.getEpics());
+        System.out.println("----- Сабтаски");
+        System.out.println(manager.getSubtasks());
+
+        manager.deleteSubtaskById(5);
+        manager.deleteSubtaskById(6);
+        System.out.println("----- Эпики, удалил 5 и 6 сабтаски у 4 эпика должен стать статус NEW");
+        System.out.println(manager.getEpics());
+
+        System.out.println("----- Эпик, добавили сабтаски");
+        manager.createSubtask(new Subtask("Купить шкаф", "купить шкаф", 4, Status.NEW));
+        manager.createSubtask(new Subtask("купить люстру", "купить люстру", 4, Status.NEW));
+        System.out.println(manager.getEpics());
+        System.out.println(manager.getSubtasks());
+        System.out.println("----- Удалили эпик");
+        manager.deleteEpicById(4);
         System.out.println(manager.getEpics());
         System.out.println(manager.getSubtasks());
 
+        System.out.println("----- Эпик и пустые");
+        manager.createEpic(new Epic("Обставить квартиру", "Нужно обставить квартиру", new ArrayList<>()));
+        manager.createEpic(new Epic("Обставить квартиру", "Нужно обставить квартиру", new ArrayList<>()));
+        System.out.println(manager.getEpics());
+        System.out.println(manager.getSubtasks());
+
+        System.out.println("----- Поменял стаус у сабтаски 10 эпика");
+        manager.createSubtask(new Subtask("Купить шкаф", "купить шкаф", 10, Status.IN_PROGRESS));
+        System.out.println(manager.getEpics());
+        System.out.println(manager.getSubtasks());
 
         System.out.println("---- История 1");
         manager.getSubtaskById(3);
