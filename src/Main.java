@@ -59,10 +59,31 @@ public class Main {
         System.out.println(manager.getEpics());
         System.out.println(manager.getSubtasks());
 
-        System.out.println("----- Поменял стаус у сабтаски 10 эпика");
-        manager.createSubtask(new Subtask("Купить шкаф", "купить шкаф", 10, Status.IN_PROGRESS));
+        System.out.println("----- Поменял стаус у сабтаски 9 эпика");
+        manager.createSubtask(new Subtask("Купить шкаф", "купить шкаф", 9, Status.IN_PROGRESS));
         System.out.println(manager.getEpics());
         System.out.println(manager.getSubtasks());
+
+        System.out.println("----- Создаем эпик и меняем статусы у его сабтасков");
+        manager.createEpic(new Epic("Обставить квартиру", "Нужно обставить квартиру", new ArrayList<>()));
+        manager.createSubtask(new Subtask("Купить шкаф", "купить шкаф", 12, Status.NEW));
+        manager.createSubtask(new Subtask("купить люстру", "купить люстру", 12, Status.NEW));
+        manager.createSubtask(new Subtask("Купить шкаф", "купить шкаф", 12, Status.NEW));
+        manager.createSubtask(new Subtask("купить люстру", "купить люстру", 12, Status.NEW));
+        System.out.println(manager.getEpicById(12));
+        manager.updateSubtask(13, new Subtask("купить люстру", "купить люстру", 12, Status.DONE));
+        manager.updateSubtask(14, new Subtask("купить люстру", "купить люстру", 12, Status.DONE));
+        manager.updateSubtask(15, new Subtask("купить люстру", "купить люстру", 12, Status.DONE));
+        manager.updateSubtask(16, new Subtask("купить люстру", "купить люстру", 12, Status.DONE));
+        System.out.println(manager.getEpicById(12));
+        manager.updateSubtask(15, new Subtask("купить люстру", "купить люстру", 12, Status.NEW));
+        manager.updateSubtask(16, new Subtask("купить люстру", "купить люстру", 12, Status.NEW));
+        System.out.println(manager.getEpicById(12));
+        manager.deleteSubtaskById(13);
+        manager.deleteSubtaskById(14);
+        manager.deleteSubtaskById(15);
+        manager.deleteSubtaskById(16);
+        System.out.println(manager.getEpicById(12));
 
         System.out.println("---- История 1");
         manager.getSubtaskById(3);
