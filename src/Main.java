@@ -3,6 +3,8 @@ import controllers.TaskManager;
 import model.*;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Main {
 
@@ -102,6 +104,11 @@ public class Main {
         System.out.println("---- История 2");
         System.out.println(manager.getHistory());
         System.out.println(manager.getHistory().size());
+
+        Map<Integer, String> map = new HashMap<>();
+        map.put(1, "Hello");
+        map.put(2, "World");
+        System.out.println(map);
 
     }
 }

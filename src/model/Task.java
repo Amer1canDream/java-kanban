@@ -38,6 +38,6 @@ public class Task {
 
     @Override
     public String toString() {
-        return id + ", " + name + ", " + description + ", " + status;
+        return name + ", " + description + ", " + status;
     }
 }
