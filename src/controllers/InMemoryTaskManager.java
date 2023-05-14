@@ -15,10 +15,6 @@ public class InMemoryTaskManager implements TaskManager {
     private HistoryManager historyManager = Managers.getDefaultHistory();
     private int id = 0;
 
-    private Integer getId() {
-        id++;
-        return id;
-    }
 
     @Override
     public HashMap<Integer, Task> getTasks() {
@@ -138,6 +134,14 @@ public class InMemoryTaskManager implements TaskManager {
         return epicSubtasks;
     }
 
+    public List<Task> getHistory() {
+        return historyManager.getHistory();
+    }
+
+    private Integer getId() {
+        id++;
+        return id;
+    }
     private void setEpicStatus(Integer epicId) {
 
         if (epics.get(epicId).getSubtasks().isEmpty()) {
@@ -173,9 +177,5 @@ public class InMemoryTaskManager implements TaskManager {
                 epics.get(epicId).setStatus(Status.IN_PROGRESS);
             }
         }
-    }
-
-    public List<Task> getHistory() {
-        return historyManager.getHistory();
     }
 }

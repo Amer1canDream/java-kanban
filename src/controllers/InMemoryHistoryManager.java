@@ -9,98 +9,98 @@ import java.util.Map;
 
 public class InMemoryHistoryManager implements HistoryManager {
 
-    private final CustomLinkedList historyManager;
+
     private final HashMap<Integer, Node<Task>> history;
 
     public InMemoryHistoryManager() {
-
-        historyManager = new CustomLinkedList();
         history = new HashMap<>();
-
     }
 
     @Override
     public void add(Task task) {
-        Node<Task> node = historyManager.linkLast(task);
-
-        //System.out.println(task);
-        //System.out.println(node.data);
+        Node<Task> node = linkLast(task);
 
         if (history.containsKey(task.getId()))
-            historyManager.removeNode(history.get(task.getId()));
+            removeNode(history.get(task.getId()));
 
         history.put(task.getId(), node);
-        //System.out.println(history);
+
     }
 
     @Override
     public void remove(int id) {
-        historyManager.removeNode(history.get(id));
+        removeNode(history.get(id));
         history.remove(id);
     }
 
     @Override
     public List<Task> getHistory() {
-        return historyManager.getTasks();
+        return getTasks();
     }
 
-    class CustomLinkedList {
 
-        private Node<Task> first;
-        private Node<Task> last;
+    private Node<Task> first;
+    private Node<Task> last;
 
-        public Node<Task> linkLast(Task task) {
+    public Node<Task> linkLast(Task task) {
 
+        Node<Task> newNode = new Node<>(null, task, null);
 
-            Node<Task> newNode = new Node<>(null, task, null);
+        newNode.prev = last;
 
-            newNode.prev = last;
+        if (last == null)
+            first = newNode;
+        else
+            last.next = newNode;
 
-            if (last == null)
-                first = newNode;
-            else
-                last.next = newNode;
+        last = newNode;
 
-            last = newNode;
+        return newNode;
 
-            return newNode;
+    }
 
+    public List<Task> getTasks() {
+
+        List<Task> tasks = new ArrayList<>();
+        Node<Task> element = first;
+
+        while (element != null) {
+            tasks.add(element.data);
+            element = element.next;
         }
 
-        public List<Task> getTasks() {
+        return tasks;
+    }
+    public void removeNode(Node<Task> node) {
 
-            List<Task> tasks = new ArrayList<>();
-            Node<Task> element = first;
+        if (node == null)
+            return;
 
-            while (element != null) {
-                tasks.add(element.data);
-                element = element.next;
-            }
 
-            return tasks;
+        if (node.equals(first)) {
+            first = node.next;
+
+            if (node.next != null)
+                node.next.prev = null;
+
+        } else {
+            node.prev.next = node.next;
+            if (node.next != null)
+                node.next.prev = node.prev;
         }
+    }
 
-        int counter;
+}
 
-        public void removeNode(Node<Task> node) {
+class Node<T> {
 
-            counter++;
-            if (node == null)
-                return;
+    T data;
+    Node<T> next;
+    Node<T> prev;
 
-            // Если текущая нода равна первой перемещаем указатель first на node.next
-            if (node.equals(first)) {
-                first = node.next;
-            // Если node.next не null - то присвоим указателю node.next.prev null
-                if (node.next != null)
-                    node.next.prev = null;
-            // Иначе если текущая нода не равна ноде из указателя first.
-            } else {
-            // Указателю next предыдущей ноды присваиваем следующую ноду вместо текущей.
-                node.prev.next = node.next;
-                if (node.next != null)
-                    node.next.prev = node.prev;
-            }
-        }
+    public Node(Node<T> prev, T data, Node<T> next) {
+        this.data = data;
+        this.next = null;
+        this.prev = null;
     }
 }
