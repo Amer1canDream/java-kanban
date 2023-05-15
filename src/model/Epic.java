@@ -6,9 +6,8 @@ import java.util.List;
 public class Epic extends Task {
     protected List<Integer> subtasks = new ArrayList<>();
 
-    public Epic(String name, String description, List<Integer> subtasks) {
+    public Epic(String name, String description) {
         super(name, description);
-        this.subtasks = subtasks;
         status = Status.IN_PROGRESS;
     }
 

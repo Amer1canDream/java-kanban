@@ -5,12 +5,13 @@ import model.Task;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class InMemoryHistoryManager implements HistoryManager {
 
 
     private final HashMap<Integer, Node<Task>> history;
+    private Node<Task> first;
+    private Node<Task> last;
 
     public InMemoryHistoryManager() {
         history = new HashMap<>();
@@ -38,15 +39,12 @@ public class InMemoryHistoryManager implements HistoryManager {
         return getTasks();
     }
 
+    private Node<Task> linkLast(Task task) {
 
-    private Node<Task> first;
-    private Node<Task> last;
-
-    public Node<Task> linkLast(Task task) {
-
-        Node<Task> newNode = new Node<>(null, task, null);
+        Node<Task> newNode = new Node<>(task);
 
         newNode.prev = last;
+        newNode.next = null;
 
         if (last == null)
             first = newNode;
@@ -59,7 +57,7 @@ public class InMemoryHistoryManager implements HistoryManager {
 
     }
 
-    public List<Task> getTasks() {
+    private List<Task> getTasks() {
 
         List<Task> tasks = new ArrayList<>();
         Node<Task> element = first;
@@ -71,7 +69,7 @@ public class InMemoryHistoryManager implements HistoryManager {
 
         return tasks;
     }
-    public void removeNode(Node<Task> node) {
+    private void removeNode(Node<Task> node) {
 
         if (node == null)
             return;
@@ -89,18 +87,14 @@ public class InMemoryHistoryManager implements HistoryManager {
                 node.next.prev = node.prev;
         }
     }
+    static class Node<T> {
 
-}
+        T data;
+        Node<T> next;
+        Node<T> prev;
 
-class Node<T> {
-
-    T data;
-    Node<T> next;
-    Node<T> prev;
-
-    public Node(Node<T> prev, T data, Node<T> next) {
-        this.data = data;
-        this.next = null;
-        this.prev = null;
+        public Node(T data) {
+            this.data = data;
+        }
     }
 }

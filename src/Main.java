@@ -16,11 +16,11 @@ public class Main {
 
         manager.createTask(new Task("Задача 1", "Описание задачи 1", Status.NEW));
         manager.createTask(new Task("Задача 2", "Описание задачи 2", Status.NEW));
-        manager.createEpic(new Epic("Эпик 1", "Описание эпика 1", new ArrayList<>()));
+        manager.createEpic(new Epic("Эпик 1", "Описание эпика 1"));
         manager.createSubtask(new Subtask("Подзадача 1", "Описание подзадачи 1", 3, Status.NEW));
         manager.createSubtask(new Subtask("Подзадача 2", "Описание подзадачи 2", 3, Status.NEW));
         manager.createSubtask(new Subtask("Подзадача 3", "Описание подзадачи 3", 3, Status.NEW));
-        manager.createEpic(new Epic("Эпик 2", "Описание эпика 2", new ArrayList<>()));
+        manager.createEpic(new Epic("Эпик 2", "Описание эпика 2"));
         System.out.println(manager.getEpics());
         System.out.println(manager.getTasks());
         System.out.println(manager.getSubtasks());
