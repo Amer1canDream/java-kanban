@@ -11,6 +11,13 @@ public class Epic extends Task {
         status = Status.IN_PROGRESS;
     }
 
+    public Epic(Integer id,String name, Status status, String description) {
+        this.id = id;
+        this.name = name;
+        this.status = status;
+        this.description = description;
+    }
+
     public void setSubtasks(int subtaskId) {
         subtasks.add(subtaskId);
     }
@@ -25,6 +32,6 @@ public class Epic extends Task {
 
     @Override
     public String toString() {
-        return name + ", " + description + ", " + status + ", " + subtasks;
+        return id + "," + TasksTypes.EPIC + "," + name + "," + status + "," + description;
     }
 }

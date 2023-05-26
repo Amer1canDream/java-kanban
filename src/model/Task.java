@@ -4,9 +4,16 @@ public class Task {
 
     protected String name;
     protected String description;
-    protected int id;
+    protected Integer id;
     protected Status status;
     public Task(String name, String description, Status status) {
+        this.name = name;
+        this.description = description;
+        this.status = status;
+    }
+
+    public Task(int id, String name, Status status, String description) {
+        this.id = id;
         this.name = name;
         this.description = description;
         this.status = status;
@@ -24,11 +31,11 @@ public class Task {
         this.status = status;
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -38,6 +45,6 @@ public class Task {
 
     @Override
     public String toString() {
-        return name + ", " + description + ", " + status;
+        return id + "," + TasksTypes.TASK + "," + name + "," + status + "," + description;
     }
 }

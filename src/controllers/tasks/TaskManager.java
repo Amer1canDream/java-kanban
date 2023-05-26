@@ -1,4 +1,4 @@
-package controllers;
+package controllers.tasks;
 
 import model.Epic;
 import model.Status;
@@ -14,9 +14,9 @@ public interface TaskManager {
     HashMap<Integer, Subtask> getSubtasks();
     HashMap<Integer, Epic> getEpics();
     void deleteAllTasks();
-    Task getTaskById(int id);
-    Subtask getSubtaskById(int id);
-    Epic getEpicById(int id);
+    Task getTaskById(Integer id);
+    Subtask getSubtaskById(Integer id);
+    Epic getEpicById(Integer id);
     void deleteTaskById(Integer id);
     void deleteSubtaskById(Integer id);
     void deleteEpicById(Integer id);

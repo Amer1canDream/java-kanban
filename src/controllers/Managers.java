@@ -1,12 +1,15 @@
 package controllers;
 
-import controllers.InMemoryHistoryManager;
-import controllers.InMemoryTaskManager;
-import controllers.TaskManager;
+import controllers.histroy.InMemoryHistoryManager;
+import controllers.tasks.FileBackedTasksManager;
+import controllers.tasks.InMemoryTaskManager;
+import controllers.tasks.TaskManager;
+
+import java.io.File;
 
 public class Managers {
     public static TaskManager getDefault() {
-        InMemoryTaskManager manager = new InMemoryTaskManager();
+        FileBackedTasksManager manager = new FileBackedTasksManager();
         return manager;
     }
 

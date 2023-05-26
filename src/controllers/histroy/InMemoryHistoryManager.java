@@ -1,5 +1,6 @@
-package controllers;
+package controllers.histroy;
 
+import controllers.histroy.HistoryManager;
 import model.Task;
 
 import java.util.ArrayList;
@@ -20,12 +21,10 @@ public class InMemoryHistoryManager implements HistoryManager {
     @Override
     public void add(Task task) {
         Node<Task> node = linkLast(task);
-
         if (history.containsKey(task.getId()))
             removeNode(history.get(task.getId()));
 
         history.put(task.getId(), node);
-
     }
 
     @Override
@@ -54,7 +53,6 @@ public class InMemoryHistoryManager implements HistoryManager {
         last = newNode;
 
         return newNode;
-
     }
 
     private List<Task> getTasks() {
@@ -66,7 +64,6 @@ public class InMemoryHistoryManager implements HistoryManager {
             tasks.add(element.data);
             element = element.next;
         }
-
         return tasks;
     }
     private void removeNode(Node<Task> node) {
