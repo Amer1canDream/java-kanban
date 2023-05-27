@@ -3,7 +3,6 @@ import java.io.*;
 
 import controllers.Managers;
 import controllers.exceptions.ManagerSaveException;
-import controllers.histroy.InMemoryHistoryManager;
 import model.*;
 
 import java.nio.file.Files;
@@ -12,7 +11,28 @@ import java.util.List;
 
 public class FileBackedTasksManager extends InMemoryTaskManager implements TaskManager {
 
-    private static final Path filePath = Path.of("src/resources/taskManagerDump.csv");
+    private static final Path filePath = Path.of("resources/taskManagerDump.csv");
+
+    @Override
+    public Task getTaskById(Integer id) {
+        Task returnedTask = super.getTaskById(id);
+        save();
+        //System.out.println(returnedTask);
+        return returnedTask;
+    }
+
+    @Override
+    public Subtask getSubtaskById(Integer id) {
+        Subtask returnedSubtask = super.getSubtaskById(id);
+        save();
+        return returnedSubtask;
+    }
+    @Override
+    public Epic getEpicById(Integer id) {
+        Epic returnedEpic = super.getEpicById(id);
+        save();
+        return returnedEpic;
+    }
     @Override
     public void createTask(Task task) {
         super.createTask(task);
@@ -60,51 +80,60 @@ public class FileBackedTasksManager extends InMemoryTaskManager implements TaskM
     }
 
     protected void save() {
-        try {
-            Writer fileWriter = new FileWriter(filePath.toFile());
-            fileWriter.write("id,type,name,status,description,epic\n");
+        try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(filePath.toFile()));
+             BufferedReader bufferedReader = new BufferedReader(new FileReader(filePath.toFile()))) {
 
+            if (bufferedReader.readLine() == null) {
+
+                String header = "id,type,name,status,description,startTime,duration,endTime,epic" + "\n";
+                bufferedWriter.write(header);
+
+            }
+
+            //System.out.println(Formatter.historyToString(historyManager));
             String lines = Formatter.tasksToString(this) + "\n" + Formatter.historyToString(historyManager);
-
-            fileWriter.write(lines);
-            fileWriter.close();
+            //System.out.println(Formatter.historyToString(historyManager));
+            bufferedWriter.write(lines);
 
         } catch (IOException e) {
             throw new ManagerSaveException("Ошибка записи в файл");
         }
     }
 
-    public static TaskManager load(Path filePath) {
+    public TaskManager load(Path filePath) {
 
-        TaskManager fileBackedTasksManager = Managers.getDefault();
+
+        TaskManager fileBackedTasksManager = Managers.getDefaultFileBackedManager();
 
         try {
             String file = Files.readString(filePath);
+            System.out.println(file);
             String[] lines = file.split("\n");
 
             for (int i = 1; i < lines.length - 2; i++) {
 
-                var task = Formatter.tasksFromString(lines[i]);
+                Task task = Formatter.tasksFromString(lines[i]);
                 String type = lines[i].split(",")[1];
 
                 if (TasksTypes.valueOf(type).equals(TasksTypes.TASK)) {
-                    fileBackedTasksManager.createTask(task);
+                    super.tasks.put(task.getId(), task);
                 }
                 if (TasksTypes.valueOf(type).equals(TasksTypes.SUBTASK)) {
                     Subtask subtask = (Subtask) task;
-                    fileBackedTasksManager.createSubtask(subtask);
+                    super.subtasks.put(task.getId(), subtask);
                 }
                 if (TasksTypes.valueOf(type).equals(TasksTypes.EPIC)) {
                     Epic epic = (Epic) task;
-                    fileBackedTasksManager.createEpic(epic);
+                    super.epics.put(task.getId(), epic);
                 }
             }
 
             String historyLine = lines[lines.length - 1];
-            String[] historyTaskIds = historyLine.split(",");
 
-            for (String historyTaskId: historyTaskIds) {
-                Integer taskId = Integer.parseInt(historyTaskId);
+            List<Integer> historyIds = Formatter.historyFromString(historyLine);
+            //System.out.println(historyIds);
+            for (Integer taskId: historyIds) {
+                //System.out.println(taskId);
                 // Для каждого спаршеного айдишника проверяем есть ли такие в Тасках, Сабтасках и Эпиках
                 // И добавляем его в нужный список
                 if ( fileBackedTasksManager.getTasks().containsKey(taskId) ) {
@@ -118,7 +147,8 @@ public class FileBackedTasksManager extends InMemoryTaskManager implements TaskM
         } catch (IOException e) {
             throw new ManagerSaveException("Ошибка загрузки из файла");
         }
-
+        //System.out.println(historyManager);
+        //System.out.println(fileBackedTasksManager.getHistory());
         return fileBackedTasksManager;
     }
 }

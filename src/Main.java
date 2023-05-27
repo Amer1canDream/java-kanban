@@ -12,7 +12,7 @@ public class Main {
 
     public static void main(String[] args) {
 
-        TaskManager manager = Managers.getDefault();
+        TaskManager manager = Managers.getDefaultFileBackedManager();
 
         System.out.println("----- ТЗ 5---");
         System.out.println("----- Создаем две задчи, эпик с 3 подзадачами и эпик без подзадача");
@@ -53,11 +53,14 @@ public class Main {
 
         System.out.println("----- Создаем обект таск менеджер из сохраненного файла -----");
 
-        TaskManager loadedManager = FileBackedTasksManager.load(Path.of("src/resources/taskManagerDump.csv"));
+        FileBackedTasksManager loadedManager = new FileBackedTasksManager();
+        loadedManager.getHistory();
+        loadedManager.getTasks();
+        loadedManager.load(Path.of("resources/taskManagerDump.csv"));
 
-        //System.out.println(loadedManager.getEpics());
-        //System.out.println(loadedManager.getTasks());
-        //System.out.println(loadedManager.getSubtasks());
+        System.out.println(loadedManager.getEpics());
+        System.out.println(loadedManager.getTasks());
+        System.out.println(loadedManager.getSubtasks());
         System.out.println(loadedManager.getHistory());
     }
 }

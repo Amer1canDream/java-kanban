@@ -9,12 +9,18 @@ import java.io.File;
 
 public class Managers {
     public static TaskManager getDefault() {
-        FileBackedTasksManager manager = new FileBackedTasksManager();
+        InMemoryTaskManager manager = new InMemoryTaskManager();
         return manager;
     }
 
     public static InMemoryHistoryManager getDefaultHistory() {
         InMemoryHistoryManager historyManager = new InMemoryHistoryManager();
         return historyManager;
+    }
+
+    public static FileBackedTasksManager getDefaultFileBackedManager() {
+
+        return new FileBackedTasksManager();
+
     }
 }

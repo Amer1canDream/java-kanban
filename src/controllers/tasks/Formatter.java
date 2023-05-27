@@ -20,7 +20,7 @@ public class Formatter {
         allTasks.addAll(tasksManager.getEpics().values());
         allTasks.addAll(tasksManager.getSubtasks().values());
 
-        for (Task task: allTasks) {
+        for (Task task : allTasks) {
             result.append(task.toString()).append("\n");
         }
 
@@ -60,18 +60,20 @@ public class Formatter {
 
 
         // Если спарсили что это сабтаска, то парси 8 значение из списка epicID
-        if (type.equals(TasksTypes.SUBTASK))
+        if (type.equals(TasksTypes.SUBTASK)) {
             epicID = Integer.parseInt(values[8]);
+        }
 
-        if (type.equals(TasksTypes.TASK))
+        if (type.equals(TasksTypes.TASK)) {
             return new Task(id, name, status, description);
-
-        if (type.equals(TasksTypes.EPIC))
+        }
+        if (type.equals(TasksTypes.EPIC)) {
             return new Epic(id, name, status, description);
-
-        if (type.equals(TasksTypes.SUBTASK))
+        }
+        if (type.equals(TasksTypes.SUBTASK)) {
             return new Subtask(id, name, status, description, epicID);
-        else
+        } else {
             throw new IllegalArgumentException("Неподдерживаемый формат задачи");
+        }
     }
 }
