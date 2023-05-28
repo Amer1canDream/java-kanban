@@ -1,7 +1,7 @@
 package controllers.tasks;
 
 import controllers.Managers;
-import controllers.histroy.HistoryManager;
+import controllers.history.HistoryManager;
 import model.*;
 
 import java.util.ArrayList;
@@ -9,9 +9,9 @@ import java.util.HashMap;
 import java.util.List;
 
 public class InMemoryTaskManager implements TaskManager {
-    protected HashMap<Integer, Task> tasks  = new HashMap<>();
-    protected HashMap<Integer, Subtask> subtasks  = new HashMap<>();
-    protected HashMap<Integer, Epic> epics  = new HashMap<>();
+    protected static HashMap<Integer, Task> tasks  = new HashMap<>();
+    protected static HashMap<Integer, Subtask> subtasks  = new HashMap<>();
+    protected static HashMap<Integer, Epic> epics  = new HashMap<>();
 
     protected static HistoryManager historyManager = Managers.getDefaultHistory();
     private int id;

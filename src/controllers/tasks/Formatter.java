@@ -1,6 +1,6 @@
 package controllers.tasks;
 
-import controllers.histroy.HistoryManager;
+import controllers.history.HistoryManager;
 import model.Epic;
 import model.Subtask;
 import model.Task;
@@ -43,6 +43,7 @@ public class Formatter {
         for (String line : value.split(","))
             history.add(Integer.parseInt(line));
 
+        System.out.println(history);
         return history;
     }
 

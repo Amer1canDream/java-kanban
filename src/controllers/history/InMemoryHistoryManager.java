@@ -1,6 +1,5 @@
-package controllers.histroy;
+package controllers.history;
 
-import controllers.histroy.HistoryManager;
 import model.Task;
 
 import java.util.ArrayList;
