@@ -13,11 +13,12 @@ public class Main {
 
     public static void main(String[] args) {
 
-        FileBackedTasksManager fileBackedTasksManager = FileBackedTasksManager.loadFromFile(new File("resources/taskManagerDump.csv"));
+        FileBackedTasksManager.main();
+        //FileBackedTasksManager fileBackedTasksManager = FileBackedTasksManager.loadFromFile(new File("resources/taskManagerDump.csv"));
+
         //System.out.println(fileBackedTasksManager.getTasks());
         //System.out.println(fileBackedTasksManager.getEpics());
         //System.out.println(fileBackedTasksManager.getSubtasks());
-        System.out.println(fileBackedTasksManager.getHistory());
-
+        //System.out.println(fileBackedTasksManager.getHistory());
     }
 }

@@ -16,9 +16,9 @@ public class Managers {
         return historyManager;
     }
 
-    public static FileBackedTasksManager getDefaultFileBackedManager() {
+    //public static FileBackedTasksManager getDefaultFileBackedManager() {
 
-        return new FileBackedTasksManager();
+      //  return new FileBackedTasksManager();
 
-    }
+    //}
 }

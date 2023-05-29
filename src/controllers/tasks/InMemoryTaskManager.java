@@ -9,11 +9,11 @@ import java.util.HashMap;
 import java.util.List;
 
 public class InMemoryTaskManager implements TaskManager {
-    protected static HashMap<Integer, Task> tasks  = new HashMap<>();
-    protected static HashMap<Integer, Subtask> subtasks  = new HashMap<>();
-    protected static HashMap<Integer, Epic> epics  = new HashMap<>();
+    private HashMap<Integer, Task> tasks  = new HashMap<>();
+    private HashMap<Integer, Subtask> subtasks  = new HashMap<>();
+    private HashMap<Integer, Epic> epics  = new HashMap<>();
 
-    protected static HistoryManager historyManager = Managers.getDefaultHistory();
+    protected HistoryManager historyManager = Managers.getDefaultHistory();
     private int id;
 
 
@@ -73,6 +73,18 @@ public class InMemoryTaskManager implements TaskManager {
         getEpicById(epicId).deleteSubtask(subtaskId);
         setEpicStatus(epicId);
         historyManager.remove(id);
+    }
+
+    public void addTaskWithoutHistory(Integer id, Task task) {
+        tasks.put(id, task);
+    }
+
+    public void addSubtaskWithoutHistory(Integer id, Subtask subtask) {
+        subtasks.put(id, subtask);
+    }
+
+    public void addEpicWithoutHistory(Integer id, Epic epic) {
+        epics.put(id, epic);
     }
     @Override
     public void createTask(Task task) {

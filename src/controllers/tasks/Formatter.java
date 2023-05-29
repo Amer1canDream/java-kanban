@@ -43,13 +43,13 @@ public class Formatter {
         for (String line : value.split(","))
             history.add(Integer.parseInt(line));
 
-        System.out.println(history);
         return history;
     }
 
+    //static Integer count = 0;
+
     public static Task tasksFromString(String value) {
 
-        //Парсим строку значения через запятую, но если у нас в описании задачи или в имени есть запятая?
         String[] values = value.split(",");
         Integer epicID = 0;
 
@@ -59,10 +59,8 @@ public class Formatter {
         Status status = Status.valueOf(values[3]);
         String description = values[4];
 
-
-        // Если спарсили что это сабтаска, то парси 8 значение из списка epicID
         if (type.equals(TasksTypes.SUBTASK)) {
-            epicID = Integer.parseInt(values[8]);
+            epicID = Integer.parseInt(values[5]);
         }
 
         if (type.equals(TasksTypes.TASK)) {
