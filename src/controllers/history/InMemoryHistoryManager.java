@@ -33,6 +33,11 @@ public class InMemoryHistoryManager implements HistoryManager {
     }
 
     @Override
+    public void removeAll() {
+        history.clear();
+    }
+
+    @Override
     public List<Task> getHistory() {
         return getTasks();
     }

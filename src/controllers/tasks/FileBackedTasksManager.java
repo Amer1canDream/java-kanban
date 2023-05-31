@@ -1,18 +1,19 @@
 package controllers.tasks;
 import java.io.*;
 
-import controllers.Managers;
 import controllers.exceptions.ManagerSaveException;
 import model.*;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.HashMap;
 import java.util.List;
 
 public class FileBackedTasksManager extends InMemoryTaskManager {
-    private static Path filePath;
+    private Path filePath;
 
-    public static void main() {
+    public static void main(String[] args) {
+        System.out.println("fileManager resources/taskManagerDump.csv");
         FileBackedTasksManager fileBackedTasksManager = FileBackedTasksManager.loadFromFile(new File("resources/taskManagerDump.csv"));
         fileBackedTasksManager.createTask(new Task("Задача 1 ", "Описание задачи 1 с сохранением в файл", Status.NEW));
         fileBackedTasksManager.createTask(new Task("Задача 2 ", "Описание задачи 2 с сохранением в файл", Status.NEW));
@@ -22,13 +23,23 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         fileBackedTasksManager.getTaskById(2);
         fileBackedTasksManager.getEpicById(3);
         fileBackedTasksManager.getSubtaskById(4);
+        System.out.println(fileBackedTasksManager.getTasks());
+        System.out.println(fileBackedTasksManager.getSubtasks());
+        System.out.println(fileBackedTasksManager.getEpics());
+        System.out.println(fileBackedTasksManager.getHistory());
 
+        System.out.println("fileManager 1 resources/taskManagerDump.csv");
         FileBackedTasksManager fileBackedTasksManager1 = FileBackedTasksManager.loadFromFile(new File("resources/taskManagerDump.csv"));
         System.out.println(fileBackedTasksManager1.getTasks());
         System.out.println(fileBackedTasksManager1.getSubtasks());
         System.out.println(fileBackedTasksManager1.getEpics());
         System.out.println(fileBackedTasksManager1.getHistory());
+        fileBackedTasksManager1.deleteTaskById(1);
+        fileBackedTasksManager = FileBackedTasksManager.loadFromFile(new File("resources/taskManagerDump.csv"));
+        System.out.println(fileBackedTasksManager.getTasks());
+        System.out.println(fileBackedTasksManager1.getTasks());
 
+        System.out.println("fileManager 2 resources/taskManagerDump2.csv");
         FileBackedTasksManager fileBackedTasksManager2 = FileBackedTasksManager.loadFromFile(new File("resources/taskManagerDump2.csv"));
         fileBackedTasksManager2.createTask(new Task("Задача 6 ", "Описание задачи 6 с сохранением в файл", Status.NEW));
         fileBackedTasksManager2.createTask(new Task("Задача 7 ", "Описание задачи 7 с сохранением в файл", Status.NEW));
@@ -42,6 +53,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
     public FileBackedTasksManager (Path filePath) {
         this.filePath = filePath;
     }
+
     @Override
     public Task getTaskById(Integer id) {
         Task returnedTask = super.getTaskById(id);
@@ -126,15 +138,10 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         }
     }
 
-    //static Integer counter = 0;
     public static FileBackedTasksManager loadFromFile (File file) {
-        //counter++;
-        //System.out.println(Path.of(file.toString()));
         Path filePath = Path.of(file.toString());
         FileBackedTasksManager fileBackedTasksManager = new FileBackedTasksManager(filePath);
-
         String fileData;
-        System.out.println(fileBackedTasksManager.getTasks());
         try {
             fileData = Files.readString(filePath);
         } catch (IOException e) {
