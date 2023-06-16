@@ -1,32 +1,57 @@
 package model;
 
+import java.time.Instant;
+
 public class Task {
 
     protected String name;
     protected String description;
     protected Integer id;
     protected Status status;
-    public Task(String name, String description, Status status) {
+    protected Instant startTime;
+    protected long duration;
+    public Task(String name, String description, Status status, Instant startTime, long duration) {
         this.name = name;
         this.description = description;
         this.status = status;
+        this.startTime = startTime;
+        this.duration = duration;
     }
 
-    public Task(int id, String name, Status status, String description) {
+    public Task(String name, String description, Instant startTime, long duration) {
+        this.name = name;
+        this.description = description;
+        this.duration = duration;
+        this.startTime = startTime;
+    }
+    public Task(int id, String name, Status status, String description, Instant startTime, long duration) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.status = status;
+        this.startTime = startTime;
+        this.duration = duration;
+    }
+    public Instant getStartTime() {
+
+        return startTime;
+
+    }
+    public Instant getEndTime() {
+        final byte SECONDS_IN_ONE_MINUTE = 60;
+        return startTime.plusSeconds(duration * SECONDS_IN_ONE_MINUTE);
+    }
+    public void setStartTime(Instant startTime) {
+        this.startTime = startTime;
     }
 
-    public Task(String name, String description) {
-        this.name = name;
-        this.description = description;
+    public long getDuration() {
+        return duration;
     }
 
-    public Task() {
+    public void setDuration(long duration) {
+        this.duration = duration;
     }
-
     public void setStatus(Status status) {
         this.status = status;
     }
@@ -45,6 +70,6 @@ public class Task {
 
     @Override
     public String toString() {
-        return id + "," + TasksTypes.TASK + "," + name + "," + status + "," + description;
+        return id + "," + TasksTypes.TASK + "," + name + "," + status + "," + description + "," + getStartTime() + "," + duration + getEndTime();
     }
 }

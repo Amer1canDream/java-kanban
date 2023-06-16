@@ -7,6 +7,7 @@ import model.Task;
 import model.TasksTypes;
 import model.Status;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -58,19 +59,21 @@ public class Formatter {
         String name = values[2];
         Status status = Status.valueOf(values[3]);
         String description = values[4];
+        Instant startTime = Instant.parse(values[5]);
+        long duration = Long.parseLong(values[6]);
 
         if (type.equals(TasksTypes.SUBTASK)) {
-            epicID = Integer.parseInt(values[5]);
+            epicID = Integer.parseInt(values[8]);
         }
 
         if (type.equals(TasksTypes.TASK)) {
-            return new Task(id, name, status, description);
+            return new Task(id, name, status, description, startTime, duration);
         }
         if (type.equals(TasksTypes.EPIC)) {
             return new Epic(id, name, status, description);
         }
         if (type.equals(TasksTypes.SUBTASK)) {
-            return new Subtask(id, name, status, description, epicID);
+            return new Subtask(id, name, status, description, epicID, startTime, duration);
         } else {
             throw new IllegalArgumentException("Неподдерживаемый формат задачи");
         }

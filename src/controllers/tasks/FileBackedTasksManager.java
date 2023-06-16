@@ -11,45 +11,6 @@ import java.util.List;
 
 public class FileBackedTasksManager extends InMemoryTaskManager {
     private Path filePath;
-
-    public static void main(String[] args) {
-        System.out.println("fileManager resources/taskManagerDump.csv");
-        FileBackedTasksManager fileBackedTasksManager = FileBackedTasksManager.loadFromFile(new File("resources/taskManagerDump.csv"));
-        fileBackedTasksManager.createTask(new Task("Задача 1 ", "Описание задачи 1 с сохранением в файл", Status.NEW));
-        fileBackedTasksManager.createTask(new Task("Задача 2 ", "Описание задачи 2 с сохранением в файл", Status.NEW));
-        fileBackedTasksManager.createEpic(new Epic("Эпик 2", "Описание эпика 2 с сохранением в файл"));
-        fileBackedTasksManager.createSubtask(new Subtask("Подзадача 2", "Описание подзадачи 2 с сохранением в файл", 3, Status.NEW));
-        fileBackedTasksManager.getTaskById(1);
-        fileBackedTasksManager.getTaskById(2);
-        fileBackedTasksManager.getEpicById(3);
-        fileBackedTasksManager.getSubtaskById(4);
-        System.out.println(fileBackedTasksManager.getTasks());
-        System.out.println(fileBackedTasksManager.getSubtasks());
-        System.out.println(fileBackedTasksManager.getEpics());
-        System.out.println(fileBackedTasksManager.getHistory());
-
-        System.out.println("fileManager 1 resources/taskManagerDump.csv");
-        FileBackedTasksManager fileBackedTasksManager1 = FileBackedTasksManager.loadFromFile(new File("resources/taskManagerDump.csv"));
-        System.out.println(fileBackedTasksManager1.getTasks());
-        System.out.println(fileBackedTasksManager1.getSubtasks());
-        System.out.println(fileBackedTasksManager1.getEpics());
-        System.out.println(fileBackedTasksManager1.getHistory());
-        fileBackedTasksManager1.deleteTaskById(1);
-        fileBackedTasksManager = FileBackedTasksManager.loadFromFile(new File("resources/taskManagerDump.csv"));
-        System.out.println(fileBackedTasksManager.getTasks());
-        System.out.println(fileBackedTasksManager1.getTasks());
-
-        System.out.println("fileManager 2 resources/taskManagerDump2.csv");
-        FileBackedTasksManager fileBackedTasksManager2 = FileBackedTasksManager.loadFromFile(new File("resources/taskManagerDump2.csv"));
-        fileBackedTasksManager2.createTask(new Task("Задача 6 ", "Описание задачи 6 с сохранением в файл", Status.NEW));
-        fileBackedTasksManager2.createTask(new Task("Задача 7 ", "Описание задачи 7 с сохранением в файл", Status.NEW));
-        fileBackedTasksManager2.getTaskById(1);
-        fileBackedTasksManager2.getTaskById(2);
-        System.out.println(fileBackedTasksManager2.getTasks());
-        System.out.println(fileBackedTasksManager2.getSubtasks());
-        System.out.println(fileBackedTasksManager2.getEpics());
-        System.out.println(fileBackedTasksManager2.getHistory());
-    }
     public FileBackedTasksManager (Path filePath) {
         this.filePath = filePath;
     }
@@ -94,8 +55,8 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         save();
     }
     @Override
-    public void updateSubtask(Integer id ,Subtask subtask) {
-        super.updateSubtask(id, subtask);
+    public void updateSubtask(Subtask subtask) {
+        super.updateSubtask(subtask);
         save();
     }
     @Override
@@ -119,15 +80,19 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         save();
     }
 
+    @Override
+    public void deleteAllTasks() {
+        super.deleteAllTasks();
+        save();
+    }
+
     protected void save() {
         try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(filePath.toFile()));
              BufferedReader bufferedReader = new BufferedReader(new FileReader(filePath.toFile()))) {
 
             if (bufferedReader.readLine() == null) {
-
                 String header = "id,type,name,status,description,startTime,duration,endTime,epic" + "\n";
                 bufferedWriter.write(header);
-
             }
 
             String lines = Formatter.tasksToString(this) + "\n" + Formatter.historyToString(historyManager);

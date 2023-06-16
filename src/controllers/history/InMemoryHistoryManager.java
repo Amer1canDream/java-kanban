@@ -34,6 +34,9 @@ public class InMemoryHistoryManager implements HistoryManager {
 
     @Override
     public void removeAll() {
+        history.forEach(
+                (key, value)
+                        -> removeNode(value));
         history.clear();
     }
 

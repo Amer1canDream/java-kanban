@@ -10,6 +10,8 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.time.Instant;
+
 class EpicWithSubtasksTest {
 
     private static TaskManager manager;
@@ -22,8 +24,8 @@ class EpicWithSubtasksTest {
     public void shouldBeNew(){
         manager.createEpic(new Epic(1,"1 name", Status.IN_PROGRESS, "Test description"));
 
-        manager.createSubtask(new Subtask("Test Subtask1","Test description 1",1,Status.NEW));
-        manager.createSubtask(new Subtask("Test Subtask2","Test description 2",1,Status.NEW));
+        manager.createSubtask(new Subtask("Test Subtask1","Test description 1",1,Status.NEW, Instant.EPOCH, 50));
+        manager.createSubtask(new Subtask("Test Subtask2","Test description 2",1,Status.NEW, Instant.EPOCH, 100));
         Assertions.assertEquals(manager.getEpicById(1).getStatus(), Status.NEW);
     }
 
@@ -31,8 +33,8 @@ class EpicWithSubtasksTest {
     public void shouldBeInProgress(){
         manager.createEpic(new Epic(1,"1 name", Status.NEW, "Test description"));
 
-        manager.createSubtask(new Subtask("Test Subtask1","Test description 1",1,Status.IN_PROGRESS));
-        manager.createSubtask(new Subtask("Test Subtask2","Test description 2",1,Status.IN_PROGRESS));
+        manager.createSubtask(new Subtask("Test Subtask1","Test description 1",1,Status.IN_PROGRESS, Instant.EPOCH, 50));
+        manager.createSubtask(new Subtask("Test Subtask2","Test description 2",1,Status.IN_PROGRESS, Instant.EPOCH, 100));
         Assertions.assertEquals(manager.getEpicById(1).getStatus(), Status.IN_PROGRESS);
     }
 
@@ -40,8 +42,8 @@ class EpicWithSubtasksTest {
     public void shouldBeInDone(){
         manager.createEpic(new Epic(1,"1 name", Status.NEW, "Test description"));
 
-        manager.createSubtask(new Subtask("Test Subtask1","Test description 1",1,Status.DONE));
-        manager.createSubtask(new Subtask("Test Subtask2","Test description 2",1,Status.DONE));
+        manager.createSubtask(new Subtask("Test Subtask1","Test description 1",1,Status.DONE, Instant.EPOCH, 200));
+        manager.createSubtask(new Subtask("Test Subtask2","Test description 2",1,Status.DONE, Instant.EPOCH, 300));
         Assertions.assertEquals(manager.getEpicById(1).getStatus(), Status.DONE);
     }
 
@@ -49,8 +51,8 @@ class EpicWithSubtasksTest {
     public void shouldBeInProgressMixed(){
         manager.createEpic(new Epic(1,"1 name", Status.NEW, "Test description"));
 
-        manager.createSubtask(new Subtask("Test Subtask1","Test description 1",1,Status.NEW));
-        manager.createSubtask(new Subtask("Test Subtask2","Test description 2",1,Status.DONE));
+        manager.createSubtask(new Subtask("Test Subtask1","Test description 1",1,Status.NEW, Instant.EPOCH, 1500));
+        manager.createSubtask(new Subtask("Test Subtask2","Test description 2",1,Status.DONE, Instant.EPOCH, 2000));
         Assertions.assertEquals(manager.getEpicById(1).getStatus(), Status.IN_PROGRESS);
     }
 }
