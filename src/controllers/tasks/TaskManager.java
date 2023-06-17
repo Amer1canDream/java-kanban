@@ -1,11 +1,9 @@
 package controllers.tasks;
 
 import model.Epic;
-import model.Status;
 import model.Subtask;
 import model.Task;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -26,6 +24,6 @@ public interface TaskManager {
     void updateTask(Task task);
     void updateSubtask(Subtask subtask);
     void updateEpic(Epic epic);
-    List getHistory();
-    void printPrioritizedTasks();
+    List<Task> getHistory();
+    List<Task> getPrioritizedTasks();
 }

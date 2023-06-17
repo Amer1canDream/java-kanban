@@ -6,7 +6,6 @@ import model.*;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.HashMap;
 import java.util.List;
 
 public class FileBackedTasksManager extends InMemoryTaskManager {

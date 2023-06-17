@@ -1,6 +1,5 @@
 package tests.Epic;
 
-import controllers.Managers;
 import controllers.tasks.InMemoryTaskManager;
 import controllers.tasks.TaskManager;
 import model.Epic;

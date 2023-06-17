@@ -212,6 +212,7 @@ public class InMemoryTaskManager implements TaskManager, Comparator<Task>{
             return;
         }
         epics.put(id, epic);
+        setEpicStatus(id);
     }
 
     private ArrayList<Subtask> getEpicSubtasks(Integer epicId) {
@@ -229,7 +230,13 @@ public class InMemoryTaskManager implements TaskManager, Comparator<Task>{
     public List<Task> getHistory() {
         return historyManager.getHistory();
     }
-
+    @Override
+    public int compare(Task o1, Task o2) {
+        return o1.getStartTime().compareTo(o2.getStartTime());
+    }
+    public List<Task> getPrioritizedTasks() {
+        return new ArrayList<>(prioritizedTasks);
+    }
     private Integer getId() {
         id++;
         return id;
@@ -288,9 +295,6 @@ public class InMemoryTaskManager implements TaskManager, Comparator<Task>{
             epics.get(epicId).setDuration(Duration.between(startTime, endTime).toMinutes());
         }
     }
-    public List<Task> getPrioritizedTasks() {
-        return new ArrayList<>(prioritizedTasks);
-    }
     private void addToPrioritizedTasks(Task task) {
         prioritizedTasks.add(task);
         checkIntersections();
@@ -305,13 +309,5 @@ public class InMemoryTaskManager implements TaskManager, Comparator<Task>{
                         + " и "
                         + prioritizedTasks.get(i - 1));
         }
-    }
-    public void printPrioritizedTasks() {
-        System.out.println("Приоритетные задачи: ");
-        prioritizedTasks.forEach(System.out::println);
-    }
-    @Override
-    public int compare(Task o1, Task o2) {
-        return o1.getStartTime().compareTo(o2.getStartTime());
     }
 }

@@ -1,6 +1,5 @@
 package tests.TaskManager;
 
-import controllers.exceptions.ManagerSaveException;
 import controllers.tasks.FileBackedTasksManager;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;

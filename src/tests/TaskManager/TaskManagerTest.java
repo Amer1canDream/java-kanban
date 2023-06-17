@@ -1,18 +1,14 @@
 package tests.TaskManager;
 
 import controllers.exceptions.ManagerDeleteTaskException;
-import controllers.exceptions.ManagerGetTaskException;
 import controllers.tasks.TaskManager;
 import model.Epic;
 import model.Status;
 
 import model.Subtask;
 import model.Task;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 
-import java.io.ByteArrayOutputStream;
-import java.io.PrintStream;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -27,23 +23,20 @@ abstract class TaskManagerTest<T extends TaskManager> {
     protected T taskManager;
 
     @Test
-    public void printPrioritizedTasksTest() {
+    public void getPrioritizedTasksTest() {
 
-        final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
         final Task task = new Task("Task1", "description", Status.NEW, Instant.ofEpochSecond(100), 0);
         final Task task1 = new Task("Task1", "description", Status.NEW, Instant.ofEpochSecond(40), 0);
         final Task task2 = new Task("Task1", "description", Status.NEW, Instant.EPOCH, 0);
         taskManager.createTask(task);
         taskManager.createTask(task1);
         taskManager.createTask(task2);
-        System.setOut(new PrintStream(outContent));
-        taskManager.printPrioritizedTasks();
-        assertEquals("Приоритетные задачи: \n" +
-                        "3,TASK,Task1,NEW,description,1970-01-01T00:00:00Z,01970-01-01T00:00:00Z\n" +
-                        "2,TASK,Task1,NEW,description,1970-01-01T00:00:40Z,01970-01-01T00:00:40Z\n" +
-                        "1,TASK,Task1,NEW,description,1970-01-01T00:01:40Z,01970-01-01T00:01:40Z\n",
-                outContent.toString());
-        System.setOut(System.out);
+        List<Task> prioritizedTasks = new ArrayList<Task>();
+        prioritizedTasks.add(task2);
+        prioritizedTasks.add(task1);
+        prioritizedTasks.add(task);
+        List<Task> prioritizedTasksCreated = taskManager.getPrioritizedTasks();
+        assertEquals(prioritizedTasks, prioritizedTasksCreated);
 
     }
     @Test
