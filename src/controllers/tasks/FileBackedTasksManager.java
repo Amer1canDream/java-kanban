@@ -125,15 +125,15 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
             String type = lines[i].split(",")[1];
 
             if (TasksTypes.valueOf(type).equals(TasksTypes.TASK)) {
-                fileBackedTasksManager.addTaskWithoutHistory(task.getId(), task);
+                fileBackedTasksManager.createTask(task);
             }
             if (TasksTypes.valueOf(type).equals(TasksTypes.SUBTASK)) {
                 Subtask subtask = (Subtask) task;
-                fileBackedTasksManager.addSubtaskWithoutHistory(task.getId(), subtask);
+                fileBackedTasksManager.createSubtask(subtask);
             }
             if (TasksTypes.valueOf(type).equals(TasksTypes.EPIC)) {
                 Epic epic = (Epic) task;
-                fileBackedTasksManager.addEpicWithoutHistory(task.getId(), epic);
+                fileBackedTasksManager.createEpic(epic);
             }
         }
 

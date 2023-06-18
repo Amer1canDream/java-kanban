@@ -132,35 +132,20 @@ public class InMemoryTaskManager implements TaskManager, Comparator<Task>{
             throw new ManagerDeleteTaskException("Поле ID пустое");
         }
     }
-
-    public void addTaskWithoutHistory(Integer id, Task task) {
-        tasks.put(id, task);
-    }
-
-    public void addSubtaskWithoutHistory(Integer id, Subtask subtask) {
-        subtasks.put(id, subtask);
-    }
-
-    public void addEpicWithoutHistory(Integer id, Epic epic) {
-        epics.put(id, epic);
-    }
-
     @Override
     public void createTask(Task task) {
-        if ( task.getId() != null ) {
-            tasks.put(task.getId(), task);
-        } else {
+        if ( task.getId() == null ) {
             Integer id = getId();
             task.setId(id);
             tasks.put(id, task);
             addToPrioritizedTasks(task);
+        } else {
+            tasks.put(task.getId(), task);
         }
     }
     @Override
     public void createSubtask(Subtask subtask) {
-        if ( subtask.getId() != null ) {
-            subtasks.put(subtask.getId(), subtask);
-        } else {
+        if ( subtask.getId() == null ) {
             Integer id = getId();
             subtask.setId(id);
             subtasks.put(id, subtask);
@@ -169,18 +154,20 @@ public class InMemoryTaskManager implements TaskManager, Comparator<Task>{
             setEpicStatus(epicId);
             setEpicStartAndEndTime(epicId);
             addToPrioritizedTasks(subtask);
+        } else {
+            subtasks.put(subtask.getId(), subtask);
         }
     }
 
     @Override
     public void createEpic(Epic epic) {
-        if ( epic.getId() != null ) {
-            epics.put(epic.getId(), epic);
-        } else {
+        if ( epic.getId() == null ) {
             Integer id = getId();
             epic.setId(id);
             epics.put(id, epic);
             setEpicStatus(id);
+        } else {
+            epics.put(epic.getId(), epic);
         }
     }
     @Override
@@ -215,7 +202,7 @@ public class InMemoryTaskManager implements TaskManager, Comparator<Task>{
         setEpicStatus(id);
     }
 
-    private ArrayList<Subtask> getEpicSubtasks(Integer epicId) {
+    public ArrayList<Subtask> getEpicSubtasks(Integer epicId) {
 
         ArrayList<Subtask> epicSubtasks = new ArrayList<Subtask>();
         List<Integer> subtasksIds = epics.get(epicId).getSubtasks();
@@ -234,6 +221,7 @@ public class InMemoryTaskManager implements TaskManager, Comparator<Task>{
     public int compare(Task o1, Task o2) {
         return o1.getStartTime().compareTo(o2.getStartTime());
     }
+    @Override
     public List<Task> getPrioritizedTasks() {
         return new ArrayList<>(prioritizedTasks);
     }
@@ -249,7 +237,6 @@ public class InMemoryTaskManager implements TaskManager, Comparator<Task>{
         }
 
         int countNew = 0;
-        int countInProgress = 0;
         int countDone = 0;
 
         for (Subtask subtask : getEpicSubtasks(epicId)) {
@@ -257,9 +244,8 @@ public class InMemoryTaskManager implements TaskManager, Comparator<Task>{
                 countNew++;
             } else if (subtask.getStatus() == Status.DONE) {
                 countDone++;
-            } else if (subtask.getStatus() == Status.IN_PROGRESS) {
-                countInProgress++;
             }
+
             if ( getEpicSubtasks(epicId).size() == countNew ) {
                 epics.get(epicId).setStatus(Status.NEW);
             } else if ( getEpicSubtasks(epicId).size() == countDone ) {
