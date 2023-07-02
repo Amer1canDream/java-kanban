@@ -3,11 +3,12 @@ package model;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class Epic extends Task {
     protected List<Integer> subtasks = new ArrayList<>();
-
-    private Instant endTime;
+    private Instant endTime = Instant.ofEpochSecond(0);
+    protected TasksTypes taskType;
 
     public Epic(String name, String description) {
         super(name, description, Instant.ofEpochSecond(0), 0);
@@ -37,6 +38,14 @@ public class Epic extends Task {
         subtasks.remove(subtaskId);
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Epic)) return false;
+        if (!super.equals(o)) return false;
+        Epic that = (Epic) o;
+        return Objects.equals(this.subtasks, that.subtasks);
+    }
     @Override
     public String toString() {
         return id + "," + TasksTypes.EPIC + "," + name + "," + status + "," + description + "," + getStartTime() + "," + duration + getEndTime();

@@ -10,6 +10,8 @@ import java.util.List;
 
 public class FileBackedTasksManager extends InMemoryTaskManager {
     private Path filePath;
+
+    public FileBackedTasksManager () {}
     public FileBackedTasksManager (Path filePath) {
         this.filePath = filePath;
     }

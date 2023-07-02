@@ -1,6 +1,7 @@
 package model;
 
 import java.time.Instant;
+import java.util.Objects;
 
 public class Subtask extends Task {
 
@@ -23,6 +24,19 @@ public class Subtask extends Task {
 
     public void setEpicId(int epicId) {
         this.epicId = epicId;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+
+        if (this == o) return true;
+        if (!(o instanceof Subtask)) return false;
+        if (!super.equals(o)) return false;
+
+        Subtask that = (Subtask) o;
+
+        return Objects.equals(this.epicId, that.epicId);
+
     }
 
     @Override

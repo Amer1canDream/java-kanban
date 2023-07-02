@@ -1,6 +1,7 @@
 package model;
 
 import java.time.Instant;
+import java.util.Objects;
 
 public class Task {
 
@@ -66,6 +67,20 @@ public class Task {
 
     public Status getStatus() {
         return status;
+    }
+    @Override
+    public boolean equals(Object o) {
+
+        if (this == o) return true;
+        if (!(o instanceof Task)) return false;
+
+        Task that = (Task) o;
+
+        return Objects.equals(this.name, that.name)
+                && Objects.equals(this.description, that.description)
+                && Objects.equals(this.id, that.id)
+                && Objects.equals(this.status, that.status);
+
     }
 
     @Override

@@ -1,5 +1,7 @@
 package controllers.tasks;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import controllers.history.HistoryManager;
 import model.Epic;
 import model.Subtask;
@@ -47,8 +49,6 @@ public class Formatter {
         return history;
     }
 
-    //static Integer count = 0;
-
     public static Task tasksFromString(String value) {
 
         String[] values = value.split(",");
@@ -77,5 +77,13 @@ public class Formatter {
         } else {
             throw new IllegalArgumentException("Неподдерживаемый формат задачи");
         }
+    }
+
+    public static Gson createGson() {
+
+        return new GsonBuilder()
+                .registerTypeAdapter(Instant.class, new InstantAdapter())
+                .create();
+
     }
 }
